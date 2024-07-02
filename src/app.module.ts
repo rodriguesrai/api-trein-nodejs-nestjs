@@ -1,22 +1,27 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Cats } from './entities/cats.entity';
 import { CatsModule } from './cats.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     CatsModule,
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'db',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'test',
-      entities: [Cats],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DATABASE_HOST'),
+        port: configService.get<number>('DATABASE_PORT'),
+        username: configService.get<string>('DATABASE_USERNAME'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        database: configService.get<string>('DATABASE_NAME'),
+        autoLoadEntities: true,
+        // synchronize: true, // Não use em produção
+      }),
     }),
   ],
   controllers: [AppController],
