@@ -14,7 +14,7 @@ export const dataSourceOptions: DataSourceOptions = {
   multipleStatements: true,
   logging: true,
   entities: ['**/*.entity{ .ts,.js}'],
-  migrations: ['src/database/migrations/*{.ts,.js}'],
+  migrations: ['dist/migrations/*.js'],
   migrationsRun: true,
 };
 
