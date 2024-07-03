@@ -13,6 +13,6 @@ export class Migrations1719948919586 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "users"`);
+    await queryRunner.query(`DROP TABLE IF EXISTS users`);
   }
 }

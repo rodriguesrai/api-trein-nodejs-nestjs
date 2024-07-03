@@ -2,6 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DataSourceOptions, DataSource } from 'typeorm';
 
 ConfigModule.forRoot(); // load .env file
+
 export const dataSourceOptions: DataSourceOptions = {
   type: (process.env.DATABASE_TYPE as any) ?? 'mysql',
   host: 'localhost',
@@ -13,8 +14,8 @@ export const dataSourceOptions: DataSourceOptions = {
   bigNumberStrings: true,
   multipleStatements: true,
   logging: true,
-  entities: ['**/*.entity{ .ts,.js}'],
-  migrations: ['dist/migrations/*.js'],
+  entities: ['src/entities/**'],
+  migrations: ['src/database/migrations/**'],
   migrationsRun: true,
 };
 
