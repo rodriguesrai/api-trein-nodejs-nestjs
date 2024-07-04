@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from '../src/controllers/app.controller';
-import { AppService } from '../src/services/app.service';
+import { AppController } from '../../src/controllers/app.controller';
+import { AppService } from '../../src/services/app.service';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -15,7 +15,7 @@ describe('AppController', () => {
   });
 
   describe('testing root route', () => {
-    it('should return "Hello World!"', () => {
+    it('should return api health"', () => {
       expect(appController.getHello()).toBe('Health: up');
     });
   });

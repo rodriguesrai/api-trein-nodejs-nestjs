@@ -10,3 +10,12 @@ export const invalidUsersBody = {
   name: 'nameInvalid',
   password: 'passwordInvalid',
 };
+
+export const returnedUser = {
+  id: 1,
+  name: 'John Doe',
+  username: 'johndoe',
+  password: '123456',
+};
+
+export const usernameValidMock = 'johndoe';
