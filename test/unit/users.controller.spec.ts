@@ -3,7 +3,7 @@ import { UsersController } from '../../src/controllers/users.controller';
 import { UsersService } from '../../src/services/users.service';
 import { Users } from '../../src/entities/users.entity';
 import { validUsersBody } from './mocks/users.mock';
-import { CreateUserDto } from 'src/controllers/dto/createUser.dto';
+import { CreateUserDto } from '../../src/controllers/dto/createUser.dto';
 
 describe('UsersController tests', () => {
   let usersController: UsersController;

@@ -1,41 +1,36 @@
-// import { ValidationPipe } from '@nestjs/common';
-// import { TestingModule, Test } from '@nestjs/testing';
-// import { CreateUserDto } from 'src/controllers/dto/createUser.dto';
+import { ValidationPipe, BadRequestException } from '@nestjs/common';
+import { CreateUserDto } from '../../src/controllers/dto/createUser.dto';
+import { validUsersBody, invalidUsersBody } from './mocks/users.mock';
 
-// describe('ValidationPipe tests', () => {
-//   let app: TestingModule;
+describe('ValidationPipe tests', () => {
+  let validationPipe: ValidationPipe;
 
-//   beforeAll(async () => {
-//     app = await Test.createTestingModule({
-//       providers: [],
-//     }).compile();
-//   });
+  beforeAll(async () => {
+    validationPipe = new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    });
+  });
 
-//   it('should validate CreateUserDto correctly', async () => {
-//     const validationPipe = new ValidationPipe({
-//       transform: true,
-//       whitelist: true,
-//       forbidNonWhitelisted: true,
-//       transformOptions: {
-//         enableImplicitConversion: true,
-//       },
-//       // Here, 'type' is necessary to satisfy ArgumentMetadata
-//       type: 'body',
-//       // Here, 'metatype' should be the class reference of CreateUserDto
-//       metatype: CreateUserDto,
-//     });
+  it('should validate CreateUserDto correctly with valid data', async () => {
+    await expect(
+      validationPipe.transform(validUsersBody, {
+        type: 'body',
+        metatype: CreateUserDto,
+      }),
+    ).resolves.toEqual(validUsersBody);
+  });
 
-//     const userDto = {
-//       name: 'John Doe',
-//       username: 'johndoe',
-//       password: '12345',
-//     };
-
-//     await expect(
-//       validationPipe.transform(userDto, {
-//         type: 'body',
-//         metatype: CreateUserDto,
-//       }),
-//     ).resolves.toEqual(userDto);
-//   });
-// });
+  it('should throw BadRequestException with invalid data', async () => {
+    await expect(
+      validationPipe.transform(invalidUsersBody, {
+        type: 'body',
+        metatype: CreateUserDto,
+      }),
+    ).rejects.toThrow(BadRequestException);
+  });
+});
