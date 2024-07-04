@@ -19,3 +19,13 @@ export const returnedUser = {
 };
 
 export const usernameValidMock = 'johndoe';
+
+export const validLoginMock = {
+  username: 'johndoe',
+  password: '123456',
+};
+
+export const invalidPasswordLoginMock = {
+  username: 'johndoe',
+  password: '',
+};
