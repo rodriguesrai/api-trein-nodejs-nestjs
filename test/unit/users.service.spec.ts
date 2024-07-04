@@ -9,7 +9,6 @@ import {
   validUsersBody,
 } from './mocks/users.mock';
 import { NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from 'src/controllers/dto/createUser.dto';
 
 describe('UsersService tests', () => {
   let usersService: UsersService;
