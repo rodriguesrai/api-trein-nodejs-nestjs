@@ -22,17 +22,6 @@ export class UsersService {
     return user;
   }
 
-  // async create(user: Partial<Users>): Promise<UsersDto> {
-  //   const { password, ...userData } = user;
-  //   const saltRounds = 10;
-  //   const hashedPassword = await bcrypt.hash(password, saltRounds);
-  //   const newUser = await this.usersRepository.save({
-  //     ...userData,
-  //     password: hashedPassword,
-  //   });
-  //   return plainToInstance(UsersDto, newUser);
-  // }
-
   async create(user: Partial<Users>): Promise<UsersDto> {
     const hashedPassword = await hashPassword(user.password);
     const newUser = this.usersRepository.create({
@@ -40,7 +29,7 @@ export class UsersService {
       password: hashedPassword,
     });
     const savedUser = await this.usersRepository.save(newUser);
-    const userDto = plainToInstance(UsersDto, savedUser); // Convertendo para UsersDto
-    return { ...userDto, id: savedUser.id }; // Incluindo o id no retorno
+    const userDto = plainToInstance(UsersDto, savedUser);
+    return { ...userDto, id: savedUser.id };
   }
 }
