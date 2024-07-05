@@ -12,8 +12,14 @@ import { CatsService } from '../services/cats.service';
 import { Cats } from '../entities/cats.entity';
 import { JwtAuthGuard } from '../middlewares/jwtAuthGuard.middleware';
 import { CreateCatDto } from './dto/createCats.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { SwaggerCreateCat, SwaggerDeleteCat, SwaggerGetAllCats, SwaggerGetCatById, SwaggerUpdateCat } from '../docs/cats.swagger';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  SwaggerCreateCat,
+  SwaggerDeleteCat,
+  SwaggerGetAllCats,
+  SwaggerGetCatById,
+  SwaggerUpdateCat,
+} from '../docs/cats.swagger';
 @ApiTags('Cats')
 @Controller('cats')
 export class CatsController {
