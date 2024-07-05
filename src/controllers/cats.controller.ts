@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CatsService } from '../services/cats.service';
 import { Cats } from '../entities/cats.entity';
+import { JwtAuthGuard } from '../middlewares/jwtAuthGuard.middleware';
 
 @Controller('cats')
+@UseGuards(JwtAuthGuard)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
