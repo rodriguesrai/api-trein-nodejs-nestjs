@@ -61,6 +61,9 @@ describe('UsersService tests', () => {
 
   it('should create a user', async () => {
     jest
+      .spyOn(usersRepository, 'create')
+      .mockReturnValue(returnedUserRepositoryMock);
+    jest
       .spyOn(usersRepository, 'save')
       .mockResolvedValue(returnedUserRepositoryMock);
 
