@@ -11,6 +11,7 @@ import {
 import { CatsService } from '../services/cats.service';
 import { Cats } from '../entities/cats.entity';
 import { JwtAuthGuard } from '../middlewares/jwtAuthGuard.middleware';
+import { CreateCatDto } from './dto/createCats.dto';
 
 @Controller('cats')
 @UseGuards(JwtAuthGuard)
@@ -28,12 +29,15 @@ export class CatsController {
   }
 
   @Post()
-  async create(@Body() cat: Cats): Promise<Cats> {
+  async create(@Body() cat: CreateCatDto): Promise<Cats> {
     return this.catsService.create(cat);
   }
 
   @Put(':id')
-  async update(@Body() cat: Cats, @Param('id') id: number): Promise<Cats> {
+  async update(
+    @Body() cat: CreateCatDto,
+    @Param('id') id: number,
+  ): Promise<Cats> {
     return this.catsService.update(id, cat);
   }
 
