@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from '../entities/users.entity';
 import { Repository } from 'typeorm';
+import { plainToInstance } from 'class-transformer';
+import { UsersDto } from '../controllers/dto/users.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +20,8 @@ export class UsersService {
     return user;
   }
 
-  async create(user: Partial<Users>): Promise<Users> {
-    return await this.usersRepository.save(user);
+  async create(user: Partial<Users>): Promise<UsersDto> {
+    const createdUser = await this.usersRepository.save(user);
+    return plainToInstance(UsersDto, createdUser);
   }
 }

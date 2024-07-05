@@ -4,9 +4,10 @@ import { Users } from '../../src/entities/users.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import {
-  returnedUser,
+  returnedUserRepositoryMock,
   usernameValidMock,
   validUsersBody,
+  returnedUserService,
 } from './mocks/users.mock';
 import { NotFoundException } from '@nestjs/common';
 
@@ -39,11 +40,13 @@ describe('UsersService tests', () => {
   });
 
   it('should if a user is returned', async () => {
-    jest.spyOn(usersRepository, 'findOne').mockResolvedValue(returnedUser);
+    jest
+      .spyOn(usersRepository, 'findOne')
+      .mockResolvedValue(returnedUserRepositoryMock);
 
     const result = await usersService.findOne(usernameValidMock);
 
-    expect(result).toEqual(returnedUser);
+    expect(result).toEqual(returnedUserRepositoryMock);
   });
 
   it('should NotFoundException when username not found', async () => {
@@ -57,10 +60,12 @@ describe('UsersService tests', () => {
   });
 
   it('should create a user', async () => {
-    jest.spyOn(usersRepository, 'save').mockResolvedValue(returnedUser);
+    jest
+      .spyOn(usersRepository, 'save')
+      .mockResolvedValue(returnedUserRepositoryMock);
 
     const result = await usersService.create(validUsersBody);
 
-    expect(result).toEqual(returnedUser);
+    expect(result).toEqual(returnedUserService);
   });
 });

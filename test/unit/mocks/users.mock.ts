@@ -11,11 +11,16 @@ export const invalidUsersBody = {
   password: 'passwordInvalid',
 };
 
-export const returnedUser = {
+export const returnedUserRepositoryMock = {
   id: 1,
   name: 'John Doe',
   username: 'johndoe',
   password: '123456',
+};
+
+export const returnedUserService = {
+  id: 1,
+  username: 'johndoe',
 };
 
 export const usernameValidMock = 'johndoe';
