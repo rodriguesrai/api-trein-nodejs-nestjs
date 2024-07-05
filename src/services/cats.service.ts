@@ -1,8 +1,6 @@
-// src/cats/services/cats.service.ts
-
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Cats } from '../entities/cats.entity';
 
 @Injectable()
@@ -17,7 +15,11 @@ export class CatsService {
   }
 
   async findOne(id: number): Promise<Cats> {
-    return await this.catsRepository.findOne({ where: { id } });
+    const response = await this.catsRepository.findOne({ where: { id } });
+    if (!response) {
+      throw new NotFoundException('Cat not found');
+    }
+    return response;
   }
 
   async create(cat: Partial<Cats>): Promise<Cats> {
@@ -25,11 +27,15 @@ export class CatsService {
   }
 
   async update(id: number, cat: Partial<Cats>): Promise<Cats> {
+    const existingCat = await this.findOne(id);
     await this.catsRepository.update(id, cat);
-    return await this.catsRepository.findOne({ where: { id } });
+    return { ...existingCat, ...cat };
   }
 
-  async delete(id: number): Promise<DeleteResult> {
-    return await this.catsRepository.delete(id);
+  async delete(id: number): Promise<void> {
+    const response = await this.findOne(id);
+    if (response) {
+      await this.catsRepository.delete(id);
+    }
   }
 }

@@ -66,6 +66,7 @@ describe('UsersService tests', () => {
     jest
       .spyOn(usersRepository, 'save')
       .mockResolvedValue(returnedUserRepositoryMock);
+    jest.spyOn(usersService, 'findOne').mockResolvedValue(undefined);
 
     const result = await usersService.create(validUsersBody);
 
