@@ -7,13 +7,21 @@ services:
     depends_on:
       db:
         condition: service_healthy 
+    # env_file:
+    #   - .env
   db:
     image: mysql:8.0.32
     container_name: db
+    cap_add:
+      - SYS_NICE
+    restart: always
     ports:
       - 3306:3306
     env_file:
       - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
     volumes: 
     -  "./init.sql:/docker-entrypoint-initdb.d/1.sql"
     healthcheck:
