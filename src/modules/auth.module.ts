@@ -3,29 +3,22 @@ import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import { UsersModule } from './users.module';
 import { JwtModule } from '@nestjs/jwt';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Users } from '../entities/users.entity';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from '../middlewares/jwtAuthGuard.middleware';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
-    JwtModule.register({
-      global: true,
-      secret: 'secret',
-      signOptions: { expiresIn: '2d' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.getOrThrow('JWT_SECRET'),
+        signOptions: { expiresIn: '2d' },
+      }),
+      inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Users]), // Certifique-se de importar suas entidades corretamente
   ],
+  exports: [JwtModule],
   controllers: [AuthController],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-    AuthService,
-  ],
-  exports: [AuthService, JwtModule],
+  providers: [AuthService],
 })
 export class AuthModule {}
