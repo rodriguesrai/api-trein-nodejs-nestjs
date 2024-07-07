@@ -3,12 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from 'dotenv';
 import { CatsModule } from './modules/cats.module';
 import { AuthModule } from './modules/auth.module';
 import { UsersModule } from './modules/users.module';
-
-config();
 
 @Module({
   imports: [
@@ -22,6 +19,7 @@ config();
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        migrations: [__dirname + '/migrations/*{.ts,.js}'],
         synchronize: true,
       }),
     }),
