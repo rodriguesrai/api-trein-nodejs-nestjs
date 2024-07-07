@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from '../../src/controllers/app.controller';
 import { AppService } from '../../src/services/app.service';
 
