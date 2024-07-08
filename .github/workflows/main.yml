@@ -65,6 +65,5 @@ jobs:
 
       - name: Run Database Migrations
         run: |
-          # Aqui você colocaria os comandos para executar as migrações do banco de dados
-          # Exemplo: npm run prod:typeorm:migration
+          npm run prod:typeorm:migration
 
