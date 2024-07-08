@@ -78,8 +78,9 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install TypeORM
-        run: npm install typeorm -g
+      - name: Install TypeORM and ts-node
+        run: |
+          npm install typeorm ts-node -g
 
       - name: Run Database Migrations
         run: npm run prod:typeorm:migration 
