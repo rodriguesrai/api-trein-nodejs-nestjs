@@ -67,7 +67,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ${{ env.IMAGE_NAME }}:latest -f Dockerfile.prod .
+      run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile.prod .
       
     - name: List Docker images
       run: docker images
