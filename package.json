@@ -25,7 +25,6 @@
     "prod:typeorm:migration": "npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js",
     "prod:typeorm:migration:revert": "npm run typeorm migration:revert -- -d ./dist/src/typeOrm.config.js",
     "prod:typeorm:migration:create": "npm run typeorm -- migration:create ./dist/src/database/migrations/$npm_config_name"
-  
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
