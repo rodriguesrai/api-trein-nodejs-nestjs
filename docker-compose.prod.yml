@@ -1,14 +1,17 @@
+# production docker-compose file
 version: '3.7'
 services:
   api-trein:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod 
     ports:
       - 3000:3000
     depends_on:
       db:
-        condition: service_healthy 
-    env_file:
-      - .env
+        condition: service_healthy
+    environment:
+      - JWT_SECRET=${{ secrets.JWT_SECRET }}
   db:
     image: mysql:8.0.32
     container_name: db
@@ -17,11 +20,9 @@ services:
     restart: always
     ports:
       - 3306:3306
-    env_file:
-      - .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
+      - MYSQL_ROOT_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+      - MYSQL_DATABASE=${{ secrets.DATABASE_NAME }}
     volumes: 
     -  "./init.sql:/docker-entrypoint-initdb.d/1.sql"
     healthcheck:

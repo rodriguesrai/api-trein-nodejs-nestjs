@@ -9,7 +9,9 @@ import { UsersModule } from './modules/users.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'mysql',

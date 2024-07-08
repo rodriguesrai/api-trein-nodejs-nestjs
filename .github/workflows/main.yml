@@ -5,6 +5,15 @@ on:
     branches:
       - TREIN-189/pipeline-github
 
+env:
+  DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+  DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+  DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  API_PORT: ${{ secrets.API_PORT }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
 jobs:
   test:
     name: Run Tests
@@ -39,7 +48,7 @@ jobs:
         run: docker build -t api-trein-nodejs-nestjs .
 
       - name: Deploy Application
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose.prod.yml up -d
 
   # migration:
   #   name: Run Database Migrations
