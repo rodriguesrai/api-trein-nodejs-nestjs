@@ -49,6 +49,9 @@ jobs:
 
       - name: Deploy Application
         run: docker-compose -f docker-compose.prod.yml up -d
+        
+      - name: Show Container Logs
+        run: docker-compose -f docker-compose.prod.yml logs
 
   # migration:
   #   name: Run Database Migrations
