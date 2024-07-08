@@ -33,51 +33,54 @@ jobs:
       - name: Run Tests
         run: npm test
 
-  build:
-    name: Build image
+  # build:
+  #   name: Build image
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     IMAGE_NAME: api-trein-nodejs-nestjs
+  #   needs: test
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: Build Docker image
+  #       run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile.prod .
+      
+  #     - name: List Docker images
+  #       run: docker images
+
+
+  build-push-image:
+    name: Build and Push Image to GitHub Registry
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: api-trein-nodejs-nestjs
-    needs: test
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile.prod .
+    - name: Login to GitHub Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build Docker image
+      run: docker build -t ${{ env.IMAGE_NAME }}:latest -f Dockerfile.prod .
       
-      - name: List Docker images
-        run: docker images
+    - name: List Docker images
+      run: docker images
+  
+    - name: Publish image to GitHub Registry
+      run: docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
-
-  push-image:
-    name: Push Docker Image to GitHub Registry
-    runs-on: ubuntu-latest
-    needs: build
-    env:
-      IMAGE_NAME: api-trein-nodejs-nestjs
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to GitHub Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: List Docker images
-        run: docker images
-
-      - name: Push Docker image to GitHub Registry
-        run: docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
 
   deploy:
     name: Deploy Application
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-push-image
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
