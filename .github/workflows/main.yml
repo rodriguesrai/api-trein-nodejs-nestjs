@@ -53,18 +53,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Deploy using Docker Compose
-        run: docker-compose -f docker-compose.prod.yml up -d --build      
-
-  migration:
-    name: Database Migrations
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
+        run: docker-compose -f docker-compose.prod.yml up -d --build     
       - name: Run Database Migrations
         run: |
-          npm install
-          npm run prod:typeorm:migration
+          npm run prod:typeorm:migration 
+
+  # migration:
+  #   name: Database Migrations
+  #   runs-on: ubuntu-latest
+  #   needs: deploy
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Run Database Migrations
+  #       run: |
+  #         npm install
+  #         npm run prod:typeorm:migration
 
