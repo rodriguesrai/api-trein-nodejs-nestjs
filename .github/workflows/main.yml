@@ -45,7 +45,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker Image
-        run: docker build -t api-trein-nodejs-nestjs .
+        run: docker build -t api-trein-nodejs-nestjs -f Dockerfile.prod .
 
       - name: Deploy Application
         run: docker-compose -f docker-compose.prod.yml up -d
