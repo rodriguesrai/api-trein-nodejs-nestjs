@@ -92,7 +92,10 @@ jobs:
           node-version: '16'
 
       - name: Deploy using Docker Compose
-        run: docker-compose -f docker-compose.prod.yml up -d --build     
+        run: docker-compose -f docker-compose.prod.yml up -d --build    
+        
+      - name: npm install
+        run: npm install
 
       - name: Run Database Migrations
         run: npm run prod:typeorm:migration
