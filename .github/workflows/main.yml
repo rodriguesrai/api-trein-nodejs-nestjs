@@ -38,9 +38,19 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Build Docker image
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # - name: Login to Github Registry
+      #   if: success()
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Build API Docker image
         run: docker build -t api-trein-nodejs-nestjs -f Dockerfile.prod .
       # - name: Push Docker image to registry
       #   run: docker push your-registry/api-trein-nodejs-nestjs
@@ -52,12 +62,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Deploy using Docker Compose
         run: docker-compose -f docker-compose.prod.yml up -d --build     
-      - name: Run Database Migrations
-        run: |
-          npm run prod:typeorm:migration 
 
+  migrate-database:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install TypeORM
+        run: npm install typeorm -g
+
+      - name: Run Database Migrations
+        run: npm run prod:typeorm:migration 
   # migration:
   #   name: Database Migrations
   #   runs-on: ubuntu-latest
