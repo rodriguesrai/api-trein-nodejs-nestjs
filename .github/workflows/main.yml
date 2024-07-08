@@ -48,10 +48,8 @@ jobs:
         run: docker build -t api-trein-nodejs-nestjs -f Dockerfile.prod .
 
       - name: Deploy Application
-        run: docker-compose -f docker-compose.prod.yml up -d
-        
-      - name: Show Container Logs
-        run: docker-compose -f docker-compose.prod.yml logs
+        run: docker-compose -f docker-compose.prod.yml up -d --build
+      
 
   # migration:
   #   name: Run Database Migrations
