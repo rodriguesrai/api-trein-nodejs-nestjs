@@ -4,6 +4,8 @@ import { AuthService } from '../../src/services/auth.service';
 import { validLoginMock } from './mocks/users.mock';
 import { invalidPasswordLoginMock } from './mocks/users.mock';
 import { HttpStatus, UnauthorizedException } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Users } from '../../src/entities/users.entity';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -18,6 +20,10 @@ describe('AuthController', () => {
           useValue: {
             login: jest.fn(),
           },
+        },
+        {
+          provide: getRepositoryToken(Users),
+          useValue: {}, // Mock the Users repository if necessary
         },
       ],
     }).compile();
