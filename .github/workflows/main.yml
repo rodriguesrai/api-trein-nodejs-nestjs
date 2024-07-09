@@ -108,7 +108,7 @@ jobs:
           ls -la ./dist/src
 
       - name: Run Database Migrations
-        run: npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
+        run: docker exec api-trein-nodejs-nestjs_api-trein_1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
   
 
   # migrate-database:
