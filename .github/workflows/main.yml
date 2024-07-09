@@ -93,13 +93,6 @@ jobs:
 
       - name: Deploy using Docker Compose
         run: docker-compose -f docker-compose.prod.yml up -d --build
-        
-      - name: npm install
-        run: npm install
-
-      - name: Wait for containers to be ready
-        run: |
-          docker-compose -f docker-compose.prod.yml ps
       
       - name: Run Database Migrations
         run: docker exec api-trein-nodejs-nestjs_api-trein_1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
