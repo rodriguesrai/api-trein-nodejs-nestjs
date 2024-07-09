@@ -99,14 +99,8 @@ jobs:
 
       - name: Wait for containers to be ready
         run: |
-          sleep 30 # Adjust this based on your application's startup time
           docker-compose -f docker-compose.prod.yml ps
       
-      - name: check files
-        run: |
-          ls -la /app
-          ls -la ./dist/src
-
       - name: Run Database Migrations
         run: docker exec api-trein-nodejs-nestjs_api-trein_1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
   
