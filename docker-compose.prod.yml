@@ -12,9 +12,9 @@ services:
         condition: service_healthy
     environment:
       JWT_SECRET: ${JWT_SECRET}
-  db:
+  database:
     image: mysql:8.0.32
-    container_name: db
+    container_name: database
     cap_add:
       - SYS_NICE
     restart: always
