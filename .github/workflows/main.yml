@@ -92,13 +92,16 @@ jobs:
           node-version: '16'
 
       - name: Deploy using Docker Compose
-        run: docker-compose -f docker-compose.prod.yml up -d --build    
+        run: docker-compose -f docker-compose.prod.yml up -d --build
         
       - name: npm install
         run: npm install
+      
+      - name: check files
+        run: ls -la /app
 
       - name: check files
-        run: ls -la dist/src
+        run: ls -la ./dist/src
 
       - name: Run Database Migrations
         run: npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
