@@ -1,9 +1,9 @@
 name: Node.js CI/CD Pipeline
 
 on:
-  push:
+  pull_request:
     branches:
-      - TREIN-189/pipeline-github
+      - main
 
 env:
   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
@@ -32,23 +32,6 @@ jobs:
 
       - name: Run Tests
         run: npm test
-
-  # build:
-  #   name: Build image
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     IMAGE_NAME: api-trein-nodejs-nestjs
-  #   needs: test
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Build Docker image
-  #       run: docker build -t ${{ env.IMAGE_NAME }} -f Dockerfile.prod .
-      
-  #     - name: List Docker images
-  #       run: docker images
-
 
   build-push-image:
     name: Build and Push Image to GitHub Registry
@@ -79,7 +62,7 @@ jobs:
 
 
   deploy-and-migration:
-    name: Deploy Application
+    name: Deploy Application and Run Migrations
     runs-on: ubuntu-latest
     needs: build-push-image
     steps:
@@ -96,23 +79,3 @@ jobs:
       
       - name: Run Database Migrations
         run: docker exec api-trein-nodejs-nestjs_api-trein_1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
-  
-
-  # migrate-database:
-  #   runs-on: ubuntu-latest
-  #   needs: deploy
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v4
-
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '16'
-
-  #     - name: Install TypeORM and ts-node
-  #       run: |
-  #         npm install typeorm ts-node -g
-
-  #     - name: Run Database Migrations
-  #       run: npm run prod:typeorm:migration 
