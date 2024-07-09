@@ -98,7 +98,7 @@ jobs:
         run: npm install
 
       - name: Run Database Migrations
-        run: npm run typeorm migration:run -- -d /app/dist/src/typeOrm.config.js
+        run: npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
   
 
   # migrate-database:
