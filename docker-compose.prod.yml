@@ -11,6 +11,7 @@ services:
       database:
         condition: service_healthy
     environment:
+      DATABASE_HOST: ${DATABASE_HOST}
       JWT_SECRET: ${JWT_SECRET}
   database:
     image: mysql:8.0.32
