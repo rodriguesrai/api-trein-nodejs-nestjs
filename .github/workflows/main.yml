@@ -97,6 +97,9 @@ jobs:
       - name: npm install
         run: npm install
 
+      - name: check files
+        run: ls -la dist/src
+
       - name: Run Database Migrations
         run: npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
   
