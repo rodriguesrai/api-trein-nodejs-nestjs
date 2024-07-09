@@ -12,7 +12,9 @@ services:
         condition: service_healthy
     environment:
       DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      BATABASE_PORT: ${DATABASE_PORT}
       JWT_SECRET: ${JWT_SECRET}
   database:
     image: mysql:8.0.32
