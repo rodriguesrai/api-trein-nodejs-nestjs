@@ -105,7 +105,8 @@ jobs:
           script: |
             whoami
             ls -la
-            cd /home/ubuntu/api-trein-nodejs-nestjs
+            cd api-trein-nodejs-nestjs
+            ls -la
             sudo echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env
             sudo echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env
             sudo echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
