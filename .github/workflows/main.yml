@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - TREIN-191/aws-deploy
   pull_request:
     branches:
       - main
+
 
 env:
   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
