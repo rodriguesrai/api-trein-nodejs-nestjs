@@ -105,13 +105,13 @@ jobs:
           script: |
             whoami
             cd /home/ubuntu/api-trein-nodejs-nestjs
-            sudo echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> /home/ubuntu/api-trein-nodejs-nestjs/.env
-            sudo echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> /home/ubuntu/api-trein-nodejs-nestjs/.env
-            sudo echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> /home/ubuntu/api-trein-nodejs-nestjs/.env
-            sudo echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> /home/ubuntu/api-trein-nodejs-nestjs/.env
-            sudo echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> /home/ubuntu/api-trein-nodejs-nestjs/.env
-            sudo echo "API_PORT=${{ secrets.API_PORT }}" >> /home/ubuntu/api-trein-nodejs-nestjs/.env
-            sudo echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /home/ubuntu/api-trein-nodejs-nestjs/.env
+            sudo echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env
+            sudo echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env
+            sudo echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
+            sudo echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
+            sudo echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
+            sudo echo "API_PORT=${{ secrets.API_PORT }}" >> .env
+            sudo echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             docker-compose down
             docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
             docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
