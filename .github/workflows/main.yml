@@ -96,6 +96,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: cat .env
+        run: cat ${{ secrets.EC2_PRIVATE_KEY }}
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
