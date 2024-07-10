@@ -96,9 +96,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: cat .env
-        run: cat ${{ secrets.EC2_PRIVATE_KEY }}
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -112,15 +109,15 @@ jobs:
             docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
             docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
 
-      - name: Create .env file
-        run: |
-          echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env
-          echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env
-          echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
-          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
-          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
-          echo "API_PORT=${{ secrets.API_PORT }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+      # - name: Create .env file
+      #   run: |
+      #     echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env
+      #     echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env
+      #     echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
+      #     echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
+      #     echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
+      #     echo "API_PORT=${{ secrets.API_PORT }}" >> .env
+      #     echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
 
 
 #  docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
