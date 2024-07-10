@@ -112,11 +112,12 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
           script: |
             cd /home/ubuntu/api-trein-nodejs-nestjs
             docker-compose down
             docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
-            docker exec api-trein-nodejs-nestjs_api-trein_1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
+            docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
 
 
 #  docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
