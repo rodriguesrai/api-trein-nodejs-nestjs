@@ -96,18 +96,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Prepare private key file
+        run: |
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > private-key.pem
+          chmod 400 private-key.pem
+
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            whoami
-            cd /home/ubuntu/api-trein-nodejs-nestjs
-            docker-compose down
-            docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
-            docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
+        run: |
+          ssh -i private-key.pem -o "StrictHostKeyChecking no" ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}
+
+      # - name: Deploy to EC2
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USERNAME }}
+      #     key: ${{ secrets.EC2_PRIVATE_KEY }}
+      #     script: |
+      #       whoami
+      #       cd /home/ubuntu/api-trein-nodejs-nestjs
+      #       docker-compose down
+      #       docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
+      #       docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
 
       # - name: Create .env file
       #   run: |
