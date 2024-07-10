@@ -18,7 +18,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('api', app, document);
-
+  console.log(`Server running on http://localhost:${port}`);
   await app.listen(port);
 }
 bootstrap();
