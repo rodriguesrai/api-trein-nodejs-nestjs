@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - TREIN-191/aws-deploy
   pull_request:
     branches:
       - main
@@ -90,7 +89,7 @@ jobs:
             cd api-trein-nodejs-nestjs
             ls -la
             rm -f .env
-            git pull https://${{ secrets.TOKEN_GH }}:x-oauth-basic@github.com/rodriguesrai/api-trein-nodejs-nestjs.git TREIN-191/aws-deploy
+            git pull https://${{ secrets.TOKEN_GH }}:x-oauth-basic@github.com/rodriguesrai/main.git TREIN-191/aws-deploy
             echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" | sudo tee -a .env
             echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" | sudo tee -a .env
             echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" | sudo tee -a .env
