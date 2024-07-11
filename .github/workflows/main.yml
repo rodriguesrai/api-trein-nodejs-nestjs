@@ -1,9 +1,10 @@
 name: Node.js CI/CD Pipeline
 
 on:
-  pull_request:
+  push:
     branches:
       - main
+
 
 env:
   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
@@ -13,6 +14,10 @@ env:
   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
   API_PORT: ${{ secrets.API_PORT }}
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  EC2_HOST: ${{ secrets.EC2_HOST }}
+  EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+  EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+  TOKEN_GH: ${{ secrets.TOKEN_GH }}
 
 jobs:
   test:
@@ -60,22 +65,34 @@ jobs:
       run: docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
 
-
-  deploy-and-migration:
-    name: Deploy Application and Run Migrations
+  deploy-and-migrations:
+    name: Deploy Application EC2 and Run Migrations
     runs-on: ubuntu-latest
     needs: build-push-image
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
         with:
-          node-version: '16'
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            cd api-trein-nodejs-nestjs
+            ls -la
+            rm -f .env
+            git pull https://${{ secrets.TOKEN_GH }}:x-oauth-basic@github.com/rodriguesrai/api-trein-nodejs-nestjs.git main
+            echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" | sudo tee -a .env
+            echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" | sudo tee -a .env
+            echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" | sudo tee -a .env
+            echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" | sudo tee -a .env
+            echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" | sudo tee -a .env
+            echo "API_PORT=${{ secrets.API_PORT }}" | sudo tee -a .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a .env
+            docker stop $(docker ps -q)
+            docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
+            docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
 
-      - name: Deploy using Docker Compose
-        run: docker-compose -f docker-compose.prod.yml up -d --build
-      
-      - name: Run Database Migrations
-        run: docker exec api-trein-nodejs-nestjs_api-trein_1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
+#  docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
