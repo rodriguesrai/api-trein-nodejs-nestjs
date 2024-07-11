@@ -98,7 +98,7 @@ jobs:
             echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" | sudo tee -a .env
             echo "API_PORT=${{ secrets.API_PORT }}" | sudo tee -a .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a .env
-            docker-compose down
+            docker stop $(docker ps -q)
             docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
             docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
 
