@@ -8,7 +8,7 @@ export class SesService {
   private ses: AWS.SES;
   private defaultSubject: string = 'Bem-vindo à nossa plataforma';
   private defaultBody: string =
-    'Olá,\n\nBem-vindo à nossa plataforma! Esperamos que tenha uma excelente experiência.\n\nAtenciosamente,\nEquipe de Suporte Areopagus';
+    'Olá,\n\nBem-vindo à nossa plataforma! Esperamos que tenha uma excelente experiência.\n\nAtenciosamente,\nEquipe de Suporte Areopagus.';
   constructor(private configService: ConfigService) {
     AWS.config.update({
       accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY'),
