@@ -81,10 +81,9 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            rm -rf ./api-trein-nodejs-nestjs
+            git clone https://${{ secrets.TOKEN_GH }}:x-oauth-basic@github.com/rodriguesrai/api-trein-nodejs-nestjs.git
             cd api-trein-nodejs-nestjs
-            rm -rf ./*
-            ls -la
-            git pull https://${{ secrets.TOKEN_GH }}:x-oauth-basic@github.com/rodriguesrai/api-trein-nodejs-nestjs.git main
             echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" | sudo tee -a .env
             echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" | sudo tee -a .env
             echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" | sudo tee -a .env
