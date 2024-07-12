@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - TREIN-FIX/use-docker-image
   pull_request:
     branches:
       - main
