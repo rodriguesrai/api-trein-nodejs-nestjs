@@ -17,6 +17,9 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       BATABASE_PORT: ${DATABASE_PORT}
       JWT_SECRET: ${JWT_SECRET}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
   # database:
   #   image: mysql:8.0.32
   #   container_name: database

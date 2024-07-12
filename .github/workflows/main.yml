@@ -6,7 +6,6 @@ on:
       - main
   
 
-
 env:
   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
@@ -19,6 +18,9 @@ env:
   EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
   EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
   TOKEN_GH: ${{ secrets.TOKEN_GH }}
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
   test:
@@ -91,6 +93,9 @@ jobs:
             echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" | sudo tee -a .env
             echo "API_PORT=${{ secrets.API_PORT }}" | sudo tee -a .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a .env
+            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" | sudo tee -a .env
+            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" | sudo tee -a .env
+            echo "AWS_REGION=${{ secrets.AWS_REGION }}" | sudo tee -a .env
             docker stop $(docker ps -q)
             docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
             docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js

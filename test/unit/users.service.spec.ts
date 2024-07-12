@@ -10,10 +10,13 @@ import {
   returnedUserService,
 } from './mocks/users.mock';
 import { NotFoundException } from '@nestjs/common';
+import { SesServiceMock } from './mocks/sesService.mock';
+import { SesService } from '../../src/services/ses.service';
 
 describe('UsersService tests', () => {
   let usersService: UsersService;
   let usersRepository: Repository<Users>;
+  let sesService: SesServiceMock;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,10 +27,17 @@ describe('UsersService tests', () => {
           useClass: Repository,
         },
       ],
-    }).compile();
+    })
+      .useMocker((token) => {
+        if (token === SesService) {
+          return new SesServiceMock();
+        }
+      })
+      .compile();
 
     usersService = module.get<UsersService>(UsersService);
     usersRepository = module.get<Repository<Users>>(getRepositoryToken(Users));
+    sesService = module.get<SesServiceMock>(SesService);
   });
 
   afterEach(() => {
@@ -68,8 +78,14 @@ describe('UsersService tests', () => {
       .mockResolvedValue(returnedUserRepositoryMock);
     jest.spyOn(usersService, 'findOne').mockResolvedValue(undefined);
 
+    const sendEmailCreatedUserSpy = jest.spyOn(
+      sesService,
+      'sendEmailCreatedUser',
+    );
+
     const result = await usersService.create(validUsersBody);
 
+    expect(sendEmailCreatedUserSpy).toHaveBeenCalledWith(validUsersBody.email);
     expect(result).toEqual(returnedUserService);
   });
 });

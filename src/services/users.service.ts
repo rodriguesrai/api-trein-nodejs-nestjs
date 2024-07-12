@@ -9,12 +9,14 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import { UsersDto } from '../controllers/dto/users.dto';
 import { hashPassword } from '../utils/bcrypt.utils';
+import { SesService } from './ses.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
+    private readonly sesService: SesService,
   ) {}
 
   async findOne(username: string): Promise<any> {
@@ -35,6 +37,7 @@ export class UsersService {
     try {
       const savedUser = await this.usersRepository.save(newUser);
       const userDto = plainToInstance(UsersDto, savedUser);
+      await this.sesService.sendEmailCreatedUser(savedUser.email);
       return { ...userDto, id: savedUser.id };
     } catch (error) {
       if (
