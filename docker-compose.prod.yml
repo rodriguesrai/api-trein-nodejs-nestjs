@@ -2,9 +2,7 @@
 version: '3.7'
 services:
   api-trein:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod 
+    image: image: ghcr.io/rodriguesrai/api-trein-nodejs-nestjs:latest
     ports:
       - 3000:3000
     # depends_on:
@@ -20,6 +18,8 @@ services:
       AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: ${AWS_REGION}
+    volumes:
+      - ./api-trein-nodejs-nestjs/.env:/app/.env
   # database:
   #   image: mysql:8.0.32
   #   container_name: database
