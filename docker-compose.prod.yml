@@ -2,7 +2,7 @@
 version: '3.7'
 services:
   api-trein:
-    image: image: ghcr.io/rodriguesrai/api-trein-nodejs-nestjs:latest
+    image: ghcr.io/rodriguesrai/api-trein-nodejs-nestjs:latest
     ports:
       - 3000:3000
     # depends_on:
