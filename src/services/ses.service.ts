@@ -17,7 +17,7 @@ export class SesService {
 
   async sendEmail(to: string, subject: string, body: string): Promise<void> {
     const params = {
-      Source: 'your_verified_email@example.com',
+      Source: 'rairodrigues@areopagus.tech',
       Destination: {
         ToAddresses: [to],
       },
