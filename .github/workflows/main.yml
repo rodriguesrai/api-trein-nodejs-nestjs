@@ -21,6 +21,7 @@ env:
   AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
+  IMAGE_NAME: api-trein-nodejs-nestjs
 
 jobs:
   test:
@@ -45,8 +46,6 @@ jobs:
     name: Build and Push Image to GitHub Registry
     runs-on: ubuntu-latest
     needs: test
-    env:
-      IMAGE_NAME: api-trein-nodejs-nestjs
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -83,19 +82,25 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            rm -rf ./api-trein-nodejs-nestjs
-            git clone https://${{ secrets.TOKEN_GH }}:x-oauth-basic@github.com/rodriguesrai/api-trein-nodejs-nestjs.git
-            cd api-trein-nodejs-nestjs
-            echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" | sudo tee -a .env
-            echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" | sudo tee -a .env
-            echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" | sudo tee -a .env
-            echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" | sudo tee -a .env
-            echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" | sudo tee -a .env
-            echo "API_PORT=${{ secrets.API_PORT }}" | sudo tee -a .env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a .env
-            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" | sudo tee -a .env
-            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" | sudo tee -a .env
-            echo "AWS_REGION=${{ secrets.AWS_REGION }}" | sudo tee -a .env
-            docker stop $(docker ps -q)
-            docker-compose --env-file .env -f docker-compose.prod.yml up -d --build
-            docker exec api-trein-nodejs-nestjs-api-trein-1 npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js
+            sudo docker container stop ${{ env.IMAGE_NAME }} || true
+            sudo docker container rm ${{ env.IMAGE_NAME }} || true
+            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            sudo docker pull ${{ env.IMAGE_NAME }}
+            sudo docker run -d \
+              --restart=unless-stopped \
+              -p ${{ env.API_PORT }}:${{ env.API_PORT }} \
+              --name ${{ env.IMAGE_NAME }} \
+              -e API_PORT="${{ secrets.API_PORT }}" \
+              -e EC2_HOST="${{ secrets.EC2_HOST }}" \
+              -e DATABASE_HOST="${{ secrets.DATABASE_HOST }}" \
+              -e DATABASE_PORT="${{ secrets.DATABASE_PORT }}" \
+              -e DATABASE_USERNAME="${{ secrets.DATABASE_USERNAME }}" \
+              -e DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}" \
+              -e DATABASE_NAME="${{ secrets.DATABASE_NAME }}" \
+              -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+              -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
+              -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+              -e AWS_REGION="${{ secrets.AWS_REGION }}" \
+              ${{ env.IMAGE_NAME }}
+
+
