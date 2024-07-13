@@ -102,6 +102,6 @@ jobs:
               -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
               -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
               -e AWS_REGION="${{ secrets.AWS_REGION }}" \
-              ${{ env.IMAGE_NAME }}
+              ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}
 
 
