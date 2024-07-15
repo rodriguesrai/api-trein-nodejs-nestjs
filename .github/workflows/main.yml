@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - TREIN-197/queuing-system
   
 
 env:
@@ -67,6 +68,44 @@ jobs:
       run: docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
 
+  # deploy-and-migrations:
+  #   name: Deploy Application EC2 and Run Migrations
+  #   runs-on: ubuntu-latest
+  #   needs: build-push-image
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Deploy to EC2
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.EC2_HOST }}
+  #         username: ${{ secrets.EC2_USERNAME }}
+  #         key: ${{ secrets.EC2_PRIVATE_KEY }}
+  #         script: |
+  #           sudo docker container stop ${{ env.IMAGE_NAME }} || true
+  #           sudo docker container rm ${{ env.IMAGE_NAME }} || true
+  #           echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  #           echo "--- Pulling image from GitHub Registry ---"
+  #           sudo docker pull ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}
+  #           sudo docker run -d \
+  #             --restart=unless-stopped \
+  #             -p ${{ env.API_PORT }}:${{ env.API_PORT }} \
+  #             --name ${{ env.IMAGE_NAME }} \
+  #             -e API_PORT="${{ secrets.API_PORT }}" \
+  #             -e EC2_HOST="${{ secrets.EC2_HOST }}" \
+  #             -e DATABASE_HOST="${{ secrets.DATABASE_HOST }}" \
+  #             -e DATABASE_PORT="${{ secrets.DATABASE_PORT }}" \
+  #             -e DATABASE_USERNAME="${{ secrets.DATABASE_USERNAME }}" \
+  #             -e DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}" \
+  #             -e DATABASE_NAME="${{ secrets.DATABASE_NAME }}" \
+  #             -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+  #             -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
+  #             -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+  #             -e AWS_REGION="${{ secrets.AWS_REGION }}" \
+  #             ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}
+
+
   deploy-and-migrations:
     name: Deploy Application EC2 and Run Migrations
     runs-on: ubuntu-latest
@@ -75,6 +114,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Generate .env.prod file
+        run: |
+            echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" | sudo tee -a .env
+            echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" | sudo tee -a .env
+            echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" | sudo tee -a .env
+            echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" | sudo tee -a .env
+            echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" | sudo tee -a .env
+            echo "API_PORT=${{ secrets.API_PORT }}" | sudo tee -a .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a .env
+            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" | sudo tee -a .env
+            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" | sudo tee -a .env
+            echo "AWS_REGION=${{ secrets.AWS_REGION }}" | sudo tee -a .env
+
+      - name: Transfer .env.prod to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: |
+            ./docker-compose.prod.yml
+            ./.env.prod
+          target: /api-trein-nodejs-nestjs
+
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -82,26 +146,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo docker container stop ${{ env.IMAGE_NAME }} || true
-            sudo docker container rm ${{ env.IMAGE_NAME }} || true
-            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            echo "--- Pulling image from GitHub Registry ---"
-            sudo docker pull ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}
-            sudo docker run -d \
-              --restart=unless-stopped \
-              -p ${{ env.API_PORT }}:${{ env.API_PORT }} \
-              --name ${{ env.IMAGE_NAME }} \
-              -e API_PORT="${{ secrets.API_PORT }}" \
-              -e EC2_HOST="${{ secrets.EC2_HOST }}" \
-              -e DATABASE_HOST="${{ secrets.DATABASE_HOST }}" \
-              -e DATABASE_PORT="${{ secrets.DATABASE_PORT }}" \
-              -e DATABASE_USERNAME="${{ secrets.DATABASE_USERNAME }}" \
-              -e DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}" \
-              -e DATABASE_NAME="${{ secrets.DATABASE_NAME }}" \
-              -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-              -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
-              -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
-              -e AWS_REGION="${{ secrets.AWS_REGION }}" \
-              ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}
-
-
+            cd /api-trein-nodejs-nestjs
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
