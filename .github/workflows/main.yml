@@ -116,16 +116,16 @@ jobs:
 
       - name: Generate .env.prod file
         run: |
-            echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" | sudo tee -a .env
-            echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" | sudo tee -a .env
-            echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" | sudo tee -a .env
-            echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" | sudo tee -a .env
-            echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" | sudo tee -a .env
-            echo "API_PORT=${{ secrets.API_PORT }}" | sudo tee -a .env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a .env
-            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" | sudo tee -a .env
-            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" | sudo tee -a .env
-            echo "AWS_REGION=${{ secrets.AWS_REGION }}" | sudo tee -a .env
+            echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" | sudo tee -a .env.prod
+            echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" | sudo tee -a .env.prod
+            echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" | sudo tee -a .env.prod
+            echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" | sudo tee -a .env.prod
+            echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" | sudo tee -a .env.prod
+            echo "API_PORT=${{ secrets.API_PORT }}" | sudo tee -a .env.prod
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a .env.prod
+            echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" | sudo tee -a .env.prod
+            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" | sudo tee -a .env.prod
+            echo "AWS_REGION=${{ secrets.AWS_REGION }}" | sudo tee -a .env.prod
 
       - name: Transfer .env.prod to EC2
         uses: appleboy/scp-action@master
@@ -147,5 +147,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd /api-trein-nodejs-nestjs
+            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker-compose --env-file .env.prod -f docker-compose.prod.yml up -d
