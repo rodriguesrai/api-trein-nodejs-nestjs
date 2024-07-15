@@ -4,9 +4,10 @@ import { UsersController } from '../controllers/users.controller';
 import { Users } from '../entities/users.entity';
 import { UsersService } from '../services/users.service';
 import { EmailModule } from './email.module';
+import { RabbitMQModule } from './rabbitmq.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users]), EmailModule],
+  imports: [TypeOrmModule.forFeature([Users]), EmailModule, RabbitMQModule],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

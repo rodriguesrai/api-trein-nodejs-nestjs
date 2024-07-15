@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth.module';
 import { UsersModule } from './modules/users.module';
 import { dataSourceOptions } from './typeOrm.config';
 import { EmailModule } from './modules/email.module';
+import { RabbitMQModule } from './modules/rabbitmq.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { EmailModule } from './modules/email.module';
     AuthModule,
     UsersModule,
     EmailModule,
+    RabbitMQModule,
   ],
   controllers: [AppController],
   providers: [AppService],
