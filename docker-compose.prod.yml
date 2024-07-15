@@ -1,15 +1,12 @@
 # production docker-compose file
 version: '3.7'
+volumes:
+ rabbitmq_data: 
 services:
   api-trein:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod 
+    image: ghcr.io/rodriguesrai/api-trein-nodejs-nestjs:latest
     ports:
       - 3000:3000
-    # depends_on:
-    #   database:
-    #     condition: service_healthy
     environment:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
@@ -17,24 +14,21 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       BATABASE_PORT: ${DATABASE_PORT}
       JWT_SECRET: ${JWT_SECRET}
+      EC2_HOST: ${EC2_HOST}
       AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: ${AWS_REGION}
-  # database:
-  #   image: mysql:8.0.32
-  #   container_name: database
-  #   cap_add:
-  #     - SYS_NICE
-  #   restart: always
-  #   ports:
-  #     - 3306:3306
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-  #     MYSQL_DATABASE: ${DATABASE_NAME}
-  #   volumes: 
-  #   -  "./init.sql:/docker-entrypoint-initdb.d/1.sql"
-  #   healthcheck:
-  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-  #     interval: 10s
-  #     retries: 5
-  #     timeout: 5s
+      API_PORT: ${API_PORT}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-my
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
