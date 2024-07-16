@@ -8,7 +8,7 @@ export class ConsumerService implements OnModuleInit {
   private channelWrapper: ChannelWrapper;
   private readonly logger = new Logger(ConsumerService.name);
   constructor(private sesService: SesService) {
-    const connection = amqp.connect(['amqp://localhost']);
+    const connection = amqp.connect(['amqp://rabbitmq:5672']);
     this.channelWrapper = connection.createChannel();
   }
 

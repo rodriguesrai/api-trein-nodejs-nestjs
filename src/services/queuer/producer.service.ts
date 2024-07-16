@@ -6,7 +6,7 @@ import { Channel } from 'amqplib';
 export class ProducerService {
   private channelWrapper: ChannelWrapper;
   constructor() {
-    const connection = amqp.connect(['amqp://localhost']);
+    const connection = amqp.connect(['amqp://rabbitmq:5672']);
     this.channelWrapper = connection.createChannel({
       setup: (channel: Channel) => {
         return channel.assertQueue('emailQueue', { durable: true });
