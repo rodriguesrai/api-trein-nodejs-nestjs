@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users.module';
 import { dataSourceOptions } from './typeOrm.config';
 import { EmailModule } from './modules/email.module';
 import { RabbitMQModule } from './modules/rabbitmq.module';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -25,4 +26,10 @@ import { RabbitMQModule } from './modules/rabbitmq.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
