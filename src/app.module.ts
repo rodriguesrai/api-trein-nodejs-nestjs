@@ -10,6 +10,7 @@ import { dataSourceOptions } from './typeOrm.config';
 import { EmailModule } from './modules/email.module';
 import { RabbitMQModule } from './modules/rabbitmq.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { DataBaseMongoModule } from './modules/databaseMongo.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
     UsersModule,
     EmailModule,
     RabbitMQModule,
+    DataBaseMongoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
