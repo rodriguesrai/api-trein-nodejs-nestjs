@@ -12,6 +12,7 @@ import { RabbitMQModule } from './modules/rabbitmq.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { DataBaseMongoModule } from './modules/databaseMongo.module';
 import { WebsocketsGatewayModule } from './modules/websockets.module';
+import { S3Module } from './modules/s3.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { WebsocketsGatewayModule } from './modules/websockets.module';
     RabbitMQModule,
     DataBaseMongoModule,
     WebsocketsGatewayModule,
+    S3Module,
   ],
   controllers: [AppController],
   providers: [AppService],
