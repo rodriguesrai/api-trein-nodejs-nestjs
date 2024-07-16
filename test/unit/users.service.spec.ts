@@ -12,6 +12,7 @@ import {
 import { NotFoundException } from '@nestjs/common';
 import { SesServiceMock } from './mocks/sesService.mock';
 import { SesService } from '../../src/services/ses.service';
+import { ProducerService } from '../../src/services/queuer/producer.service';
 
 describe('UsersService tests', () => {
   let usersService: UsersService;
@@ -31,6 +32,11 @@ describe('UsersService tests', () => {
       .useMocker((token) => {
         if (token === SesService) {
           return new SesServiceMock();
+        }
+        if (token === ProducerService) {
+          return {
+            addToEmailQueue: jest.fn(),
+          };
         }
       })
       .compile();
@@ -78,14 +84,9 @@ describe('UsersService tests', () => {
       .mockResolvedValue(returnedUserRepositoryMock);
     jest.spyOn(usersService, 'findOne').mockResolvedValue(undefined);
 
-    const sendEmailCreatedUserSpy = jest.spyOn(
-      sesService,
-      'sendEmailCreatedUser',
-    );
 
     const result = await usersService.create(validUsersBody);
 
-    expect(sendEmailCreatedUserSpy).toHaveBeenCalledWith(validUsersBody.email);
     expect(result).toEqual(returnedUserService);
   });
 });

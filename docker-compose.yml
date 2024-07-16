@@ -1,4 +1,6 @@
 version: '3.7'
+volumes:
+ rabbitmq_data: 
 services:
   api-trein:
     build: .
@@ -9,6 +11,8 @@ services:
         condition: service_healthy 
     env_file:
       - .env
+    # volumes:
+    #   - /home/rairodrigues/Documentos/Areopagus/api-trein-nodejs-nestjs/dist:/app/dist
   database:
     image: mysql:8.0.32
     container_name: database
@@ -23,9 +27,17 @@ services:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
     volumes: 
-    -  "./init.sql:/docker-entrypoint-initdb.d/1.sql"
+      -  "./init.sql:/docker-entrypoint-initdb.d/1.sql"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       retries: 5
       timeout: 5s
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-my
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
