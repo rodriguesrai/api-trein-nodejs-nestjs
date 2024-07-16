@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
+import { AwsConfigService } from '../utils/aws.config';
 
 @Injectable()
 export class SesService {
@@ -9,13 +10,11 @@ export class SesService {
   private defaultSubject: string = 'Bem-vindo à nossa plataforma';
   private defaultBody: string =
     'Olá,\n\nBem-vindo à nossa plataforma! Esperamos que tenha uma excelente experiência.\n\nAtenciosamente,\nEquipe de Suporte Areopagus.';
-  constructor(private configService: ConfigService) {
-    AWS.config.update({
-      accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY'),
-      secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
-      region: this.configService.get<string>('AWS_REGION'),
-    });
-    this.ses = new AWS.SES();
+  constructor(
+    private configService: ConfigService,
+    private awsConfigService: AwsConfigService,
+  ) {
+    this.ses = new AWS.SES(this.awsConfigService.getAwsConfig());
   }
 
   async sendEmailCreatedUser(to: string): Promise<void> {
