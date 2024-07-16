@@ -11,6 +11,7 @@ import { EmailModule } from './modules/email.module';
 import { RabbitMQModule } from './modules/rabbitmq.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { DataBaseMongoModule } from './modules/databaseMongo.module';
+import { WebsocketsGatewayModule } from './modules/websockets.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DataBaseMongoModule } from './modules/databaseMongo.module';
     EmailModule,
     RabbitMQModule,
     DataBaseMongoModule,
+    WebsocketsGatewayModule,
   ],
   controllers: [AppController],
   providers: [AppService],
