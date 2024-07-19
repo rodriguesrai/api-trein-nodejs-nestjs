@@ -9,6 +9,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useWebSocketAdapter(new SocketIoAdapter(app));
 
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
+  });
+
   const configSwagger = new DocumentBuilder()
     .setTitle('Cats example')
     .setDescription('The cats API description')
