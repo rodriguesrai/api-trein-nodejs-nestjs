@@ -9,8 +9,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useWebSocketAdapter(new SocketIoAdapter(app));
 
+  const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: clientOrigin,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
@@ -21,9 +22,10 @@ async function bootstrap() {
     .setDescription('The cats API description')
     .setVersion('1.0')
     .build();
+
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  await app.listen(process.env.API_PORT);
   Logger.log(`Server is running at ${await app.getUrl()}`);
 }
 bootstrap();

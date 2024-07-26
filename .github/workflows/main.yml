@@ -108,6 +108,7 @@ jobs:
               -p ${{ env.API_PORT }}:${{ env.API_PORT }} \
               --name ${{ env.IMAGE_NAME }} \
               -e API_PORT="${{ secrets.API_PORT }}" \
+              -e CLIENT_ORIGIN="${{ secrets.CLIENT_ORIGIN }}" \
               -e EC2_HOST="${{ secrets.EC2_HOST }}" \
               -e DATABASE_HOST="${{ secrets.DATABASE_HOST }}" \
               -e DATABASE_PORT="${{ secrets.DATABASE_PORT }}" \
