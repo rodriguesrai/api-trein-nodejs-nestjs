@@ -10,6 +10,6 @@ import { RabbitMQModule } from './rabbitmq.module';
   imports: [TypeOrmModule.forFeature([Users]), EmailModule, RabbitMQModule],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [UsersService],
+  exports: [UsersService, TypeOrmModule.forFeature([Users])],
 })
 export class UsersModule {}
