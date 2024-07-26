@@ -139,6 +139,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo docker exec -it ${{ env.IMAGE_NAME }} npm run prod:typeorm:migration
+            sudo docker exec ${{ env.IMAGE_NAME }} npm run prod:typeorm:migration
       
       
