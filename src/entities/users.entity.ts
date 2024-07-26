@@ -4,7 +4,7 @@ import { Cats } from './cats.entity';
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn()
-  @OneToMany(() => Cats, (cats) => cats.userId)
+  @OneToMany(() => Cats, (cats) => cats.user)
   id: number;
 
   @Column()

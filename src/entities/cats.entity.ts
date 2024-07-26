@@ -7,7 +7,7 @@ export class Cats {
   id: number;
 
   @ManyToOne(() => Users, (users) => users.id)
-  userId: number;
+  user: number;
 
   @Column()
   name: string;
