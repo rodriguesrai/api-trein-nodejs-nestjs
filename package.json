@@ -21,8 +21,8 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:run": "npm run typeorm migration:run -- -d ./src/typeOrm.config.ts",
     "typeorm:revert": "npm run typeorm migration:revert -- -d ./src/typeOrm.config.ts",
-    "typeorm:migration:create": "typeorm migration:create ./src/typeOrm.config.json/",
-    "typeorm:migration:generate": "typeorm migration:generate -d src/typeOrm.config.ts $npm_config_name",
+    "typeorm:create": "typeorm migration:create",
+    "typeorm:generate": "typeorm migration:generate",
     "prod:typeorm:migration": "npm run typeorm migration:run -- -d ./dist/src/typeOrm.config.js",
     "prod:typeorm:migration:revert": "npm run typeorm migration:revert -- -d ./dist/src/typeOrm.config.js",
     "prod:typeorm:migration:create": "npm run typeorm -- migration:create ./dist/src/database/migrations/$npm_config_name"

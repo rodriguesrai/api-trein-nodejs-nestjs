@@ -2,6 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 ConfigModule.forRoot();
+
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
   host: process.env.DATABASE_HOST,
@@ -14,6 +15,5 @@ export const dataSourceOptions: DataSourceOptions = {
   synchronize: false, // Should be false in production
 };
 
-const dataSource = new DataSource(dataSourceOptions);
-
-export default dataSource;
+const dataSourceInstance = new DataSource(dataSourceOptions);
+export default dataSourceInstance;
