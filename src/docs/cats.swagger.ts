@@ -26,6 +26,16 @@ export function SwaggerCreateCat() {
   );
 }
 
+export function SwaggerCreateRelationCatUser() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: 'Add an owner(User) to a Cat' }),
+    ApiResponse({ status: 201, description: 'Relation created successfully' }),
+    ApiResponse({ status: 400, description: 'Bad request' }),
+    ApiResponse({ status: 401, description: 'Unauthorized' }),
+  );
+}
+
 export function SwaggerUpdateCat() {
   return applyDecorators(
     ApiBearerAuth(),

@@ -15,6 +15,7 @@ import { CreateCatDto } from './dto/createCats.dto';
 import { ApiTags } from '@nestjs/swagger';
 import {
   SwaggerCreateCat,
+  SwaggerCreateRelationCatUser,
   SwaggerDeleteCat,
   SwaggerGetAllCats,
   SwaggerGetCatById,
@@ -43,6 +44,20 @@ export class CatsController {
   @SwaggerCreateCat()
   async create(@Body() cat: CreateCatDto): Promise<Cats> {
     return await this.catsService.create(cat);
+  }
+
+  @Post(':catId/user/:userId')
+  @UseGuards(JwtAuthGuard)
+  @SwaggerCreateRelationCatUser()
+  async createRelation(
+    @Param('catId') catId: number,
+    @Param('userId') userId: number,
+  ): Promise<Cats> {
+    const serviceResponse = await this.catsService.associateUserToCat(
+      catId,
+      userId,
+    );
+    return serviceResponse;
   }
 
   @Put(':id')
