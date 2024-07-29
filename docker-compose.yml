@@ -13,6 +13,13 @@ services:
       - .env
     # volumes:
     #   - /home/rairodrigues/Documentos/Areopagus/api-trein-nodejs-nestjs/dist:/app/dist
+  cats-service:
+    build: ./cats
+    ports:
+      - 3001:3001
+    depends_on:
+      database:
+        condition: service_healthy
   database:
     image: mysql:8.0.32
     container_name: database
