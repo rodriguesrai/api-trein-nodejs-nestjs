@@ -14,7 +14,7 @@ export class CatsService {
   ) {}
 
   async findAll(): Promise<Cats[]> {
-    return await this.catsRepository.find({ relations: ['users'] });
+    return await this.catsRepository.find({ relations: ['user'] });
   }
 
   async findOne(id: number): Promise<Cats> {

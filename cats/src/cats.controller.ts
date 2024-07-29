@@ -33,7 +33,7 @@ export class CatsController {
   }
 
   @MessagePattern({ cmd: 'delete_cat' })
-  async delete(id: number): Promise<Cats> {
+  async delete(id: number): Promise<void> {
     return await this.catsService.delete(id);
   }
 }
