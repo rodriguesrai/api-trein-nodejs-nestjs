@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cats } from '../entities/cats.entity';
 import { Users } from '../entities/users.entity';
+import { ServiceResponse } from 'src/interfaces/serviceResponse';
 
 @Injectable()
 export class CatsService {
@@ -13,57 +14,95 @@ export class CatsService {
     private usersRepository: Repository<Users>,
   ) {}
 
-  async findAll(): Promise<Cats[]> {
-    return await this.catsRepository.find({ relations: ['userId'] });
+  async findAll(): Promise<ServiceResponse<Cats[]>> {
+    const response = await this.catsRepository.find({ relations: ['userId'] });
+    return {
+      status: HttpStatus.OK,
+      data: response,
+    };
   }
 
-  async findOne(catId: number): Promise<Cats> {
+  async findOne(catId: number): Promise<ServiceResponse<Cats>> {
     const response = await this.catsRepository.findOne({
       where: { catId },
       relations: ['userId'],
     });
+
     if (!response) {
-      throw new NotFoundException('Cat not found');
+      return {
+        status: HttpStatus.NOT_FOUND,
+        data: { message: 'Cat not found' },
+      };
     }
-    return response;
+    return { status: HttpStatus.OK, data: response };
   }
 
-  async create(cat: Partial<Cats>): Promise<Cats> {
-    return await this.catsRepository.save(cat);
+  async create(cat: Partial<Cats>): Promise<ServiceResponse<Cats>> {
+    const response = await this.catsRepository.save(cat);
+    return { status: HttpStatus.CREATED, data: response };
   }
 
-  async associateUserToCat(catId: number, userId: number): Promise<Cats> {
+  async associateUserToCat(
+    catId: number,
+    userId: number,
+  ): Promise<ServiceResponse<Cats>> {
     const cat = await this.catsRepository.findOne({ where: { catId } });
     if (!cat) {
-      throw new NotFoundException(`Cat with id ${catId} not found`);
+      return {
+        status: HttpStatus.NOT_FOUND,
+        data: { message: `Cat with id ${catId} not found` },
+      };
     }
     const user = await this.usersRepository.findOne({ where: { userId } });
     if (!user) {
-      throw new NotFoundException(`User with id ${userId} not found`);
+      return {
+        status: HttpStatus.NOT_FOUND,
+        data: { message: `User with id ${userId} not found` },
+      };
     }
 
     cat.userId = user.userId;
-    await this.catsRepository.save(cat);
+    const updatedCat = await this.catsRepository.save(cat);
 
-    return cat;
+    return { status: HttpStatus.OK, data: updatedCat };
   }
 
-  async update(id: number, cat: Partial<Cats>): Promise<Cats> {
-    const existingCat = await this.findOne(id);
-    await this.catsRepository.update(id, cat);
-    return { ...existingCat, ...cat };
+  async update(
+    catId: number,
+    catUpdates: Partial<Cats>,
+  ): Promise<ServiceResponse<Cats>> {
+    const existingCat = await this.catsRepository.findOne({ where: { catId } });
+
+    if (!existingCat) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        data: { message: `Cat with id ${catId} not found` },
+      };
+    }
+
+    Object.assign(existingCat, catUpdates);
+    const updatedCat = await this.catsRepository.save(existingCat);
+
+    return { status: HttpStatus.OK, data: updatedCat };
   }
 
-  async delete(catId: number) {
-    console.log('catService');
+  async delete(catId: number): Promise<ServiceResponse<null>> {
     const cat = await this.catsRepository.findOne({
       where: { catId },
       relations: ['userId'],
     });
 
     if (!cat) {
-      throw new NotFoundException(`Cat with id ${catId} not found`);
+      return {
+        status: HttpStatus.NOT_FOUND,
+        data: { message: `Cat with id ${catId} not found` },
+      };
     }
-    return await this.catsRepository.delete(cat.catId);
+    await this.catsRepository.delete(catId);
+
+    return {
+      status: HttpStatus.OK,
+      data: { message: `Cat with id ${catId} has been deleted` },
+    };
   }
 }

@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from '../services/cats.service';
 import { Cats } from '../entities/cats.entity';
@@ -23,8 +24,10 @@ import {
   SwaggerUpdateCat,
 } from '../docs/cats.swagger';
 import { ClientProxy } from '@nestjs/microservices';
+import { MicroserviceResponseInterceptor } from '../middlewares/microserviceResponse.middleware';
 @ApiTags('Cats')
 @Controller('cats')
+@UseInterceptors(MicroserviceResponseInterceptor)
 export class CatsController {
   constructor(
     @Inject('CATS_SERVICE') private readonly catsServiceClient: ClientProxy,
