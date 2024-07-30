@@ -47,46 +47,45 @@ export class CatsController {
       { cmd: 'get_one_cat' },
       id,
     );
-    console.log('response', response);
-
     return response;
   }
 
-  // @Post()
-  // @UseGuards(JwtAuthGuard)
-  // @SwaggerCreateCat()
-  // async create(@Body() cat: CreateCatDto): Promise<Cats> {
-  //   return await this.catsService.create(cat);
-  // }
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  @SwaggerCreateCat()
+  async create(@Body() cat: CreateCatDto) {
+    return await this.catsServiceClient.send({ cmd: 'create_cat' }, cat);
+  }
 
-  // @Post(':catId/user/:userId')
-  // @UseGuards(JwtAuthGuard)
-  // @SwaggerCreateRelationCatUser()
-  // async createRelation(
-  //   @Param('catId') catId: number,
-  //   @Param('userId') userId: number,
-  // ): Promise<Cats> {
-  //   const serviceResponse = await this.catsService.associateUserToCat(
-  //     catId,
-  //     userId,
-  //   );
-  //   return serviceResponse;
-  // }
+  @Post(':catId/user/:userId')
+  @UseGuards(JwtAuthGuard)
+  @SwaggerCreateRelationCatUser()
+  async createRelation(
+    @Param('catId') catId: number,
+    @Param('userId') userId: number,
+  ) {
+    const serviceResponse = await this.catsServiceClient.send(
+      { cmd: 'associate_user_to_cat' },
+      { catId, userId },
+    );
+    return serviceResponse;
+  }
 
-  // @Put(':id')
-  // @UseGuards(JwtAuthGuard)
-  // @SwaggerUpdateCat()
-  // async update(
-  //   @Body() cat: CreateCatDto,
-  //   @Param('id') id: number,
-  // ): Promise<Cats> {
-  //   return await this.catsService.update(id, cat);
-  // }
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  @SwaggerUpdateCat()
+  async update(@Body() cat: CreateCatDto, @Param('id') id: number) {
+    return await this.catsServiceClient.send(
+      { cmd: 'update_cat' },
+      { id, cat },
+    );
+  }
 
-  // @Delete(':id')
-  // @UseGuards(JwtAuthGuard)
-  // @SwaggerDeleteCat()
-  // async delete(@Param('id') id: number): Promise<void> {
-  //   await this.catsService.delete(id);
-  // }
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @SwaggerDeleteCat()
+  async delete(@Param('id') id: number) {
+    console.log(`Received request to delete cat with id: ${id}`);
+    return await this.catsServiceClient.send({ cmd: 'delete_cat' }, id);
+  }
 }

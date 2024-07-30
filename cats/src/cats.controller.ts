@@ -23,17 +23,20 @@ export class CatsController {
   }
 
   @MessagePattern({ cmd: 'associate_user_to_cat' })
-  async createRelation(catId: number, userId: number): Promise<Cats> {
+  async createRelation(data): Promise<Cats> {
+    const { catId, userId } = data;
     return await this.catsService.associateUserToCat(catId, userId);
   }
 
   @MessagePattern({ cmd: 'update_cat' })
-  async update(id: number, cat: Cats): Promise<Cats> {
+  async update(data): Promise<Cats> {
+    const { id, cat } = data;
     return await this.catsService.update(id, cat);
   }
 
   @MessagePattern({ cmd: 'delete_cat' })
-  async delete(id: number): Promise<void> {
+  async delete(id: number) {
+    console.log(`Handling delete_cat message for id: ${id}`);
     return await this.catsService.delete(id);
   }
 }

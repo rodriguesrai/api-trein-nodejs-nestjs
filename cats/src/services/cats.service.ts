@@ -20,6 +20,7 @@ export class CatsService {
   async findOne(catId: number): Promise<Cats> {
     const response = await this.catsRepository.findOne({
       where: { catId },
+      relations: ['userId'],
     });
     if (!response) {
       throw new NotFoundException('Cat not found');
@@ -53,10 +54,16 @@ export class CatsService {
     return { ...existingCat, ...cat };
   }
 
-  async delete(id: number): Promise<void> {
-    const response = await this.findOne(id);
-    if (response) {
-      await this.catsRepository.delete(id);
+  async delete(catId: number) {
+    console.log('catService');
+    const cat = await this.catsRepository.findOne({
+      where: { catId },
+      relations: ['userId'],
+    });
+
+    if (!cat) {
+      throw new NotFoundException(`Cat with id ${catId} not found`);
     }
+    return await this.catsRepository.delete(cat.catId);
   }
 }
