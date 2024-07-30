@@ -1,13 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Users } from './users.entity';
 
 @Entity()
 export class Cats {
   @PrimaryGeneratedColumn()
-  id: number;
+  catId: number;
 
-  @ManyToOne(() => Users, (users) => users.id)
-  user: number;
+  @ManyToOne(() => Users, (users) => users.userId)
+  @JoinColumn({ name: 'userId' })
+  userId: number;
 
   @Column()
   name: string;

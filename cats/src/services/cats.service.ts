@@ -14,13 +14,12 @@ export class CatsService {
   ) {}
 
   async findAll(): Promise<Cats[]> {
-    return await this.catsRepository.find({ relations: ['user'] });
+    return await this.catsRepository.find({ relations: ['userId'] });
   }
 
-  async findOne(id: number): Promise<Cats> {
+  async findOne(catId: number): Promise<Cats> {
     const response = await this.catsRepository.findOne({
-      where: { id },
-      relations: ['users'],
+      where: { catId },
     });
     if (!response) {
       throw new NotFoundException('Cat not found');
@@ -33,16 +32,16 @@ export class CatsService {
   }
 
   async associateUserToCat(catId: number, userId: number): Promise<Cats> {
-    const cat = await this.catsRepository.findOne({ where: { id: catId } });
+    const cat = await this.catsRepository.findOne({ where: { catId } });
     if (!cat) {
       throw new NotFoundException(`Cat with id ${catId} not found`);
     }
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    const user = await this.usersRepository.findOne({ where: { userId } });
     if (!user) {
       throw new NotFoundException(`User with id ${userId} not found`);
     }
 
-    cat.user = user.id;
+    cat.userId = user.userId;
     await this.catsRepository.save(cat);
 
     return cat;

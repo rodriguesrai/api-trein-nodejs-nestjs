@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { CatsService } from './services/cats.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { Cats } from './interfaces/cats.interface';
+import { Cats } from './entities/cats.entity';
 
 @Controller()
 export class CatsController {

@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,8 +13,6 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { DataBaseMongoModule } from './modules/databaseMongo.module';
 import { WebsocketsGatewayModule } from './modules/websockets.module';
 import { S3Module } from './modules/s3.module';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
-import { CatsMicroController } from './controllers/catsMicro.controller';
 
 @Module({
   imports: [
@@ -31,23 +29,8 @@ import { CatsMicroController } from './controllers/catsMicro.controller';
     WebsocketsGatewayModule,
     S3Module,
   ],
-  controllers: [AppController, CatsMicroController],
-  providers: [
-    AppService,
-    {
-      provide: 'CATS_SERVICE',
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        return ClientProxyFactory.create({
-          transport: Transport.TCP,
-          options: {
-            host: configService.get('CATS_SERVICE_HOST'),
-            port: configService.get('CATS_SERVICE_PORT'),
-          },
-        });
-      },
-    },
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
