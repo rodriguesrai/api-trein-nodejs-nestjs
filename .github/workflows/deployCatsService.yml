@@ -1,0 +1,38 @@
+name: Deploy Cats Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - cats/**
+
+env:
+  IMAGE_NAME: cats-service
+  REGISTRY: ghcr.io
+  CONTAINER_NAME: api-trein-cats-service
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        working-directory: cats
+        run: docker build -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }} .
+      
+      - name: List Docker images
+        run: docker images
+
+      - name: Publish image to GitHub Registry
+        run: docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest

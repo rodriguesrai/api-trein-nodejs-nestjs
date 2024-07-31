@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false
   },
   "exclude": [
-    "cats",
+    "catsService",
     "node_modules",
     "dist"
       // Adicione esta linha para excluir o diretório /cats
