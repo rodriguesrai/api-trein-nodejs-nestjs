@@ -121,6 +121,8 @@ jobs:
               -e AWS_REGION="${{ secrets.AWS_REGION }}" \
               -e MONGODB_URI="${{ secrets.MONGODB_URI }}" \
               -e S3_BUCKET_NAME="${{ secrets.S3_BUCKET_NAME }}" \
+              -e CATS_SERVICE_HOST="${{ secrets.CATS_SERVICE_HOST }}" \
+              -e CATS_SERVICE_PORT="${{ secrets.CATS_SERVICE_PORT }}" \
               --network mynetwork \
               ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}
 

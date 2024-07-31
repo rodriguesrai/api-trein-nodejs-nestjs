@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { CatsController } from '../controllers/cats.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule } from '@nestjs/config';
 
+ConfigModule.forRoot();
 @Module({
   imports: [
     ClientsModule.register([
@@ -10,8 +12,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'CATS_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
-          port: 3001,
+          host: process.env.CATS_SERVICE_HOST,
+          port: parseInt(process.env.CATS_SERVICE_PORT),
         },
       },
     ]),
