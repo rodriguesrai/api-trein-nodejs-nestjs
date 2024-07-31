@@ -10,8 +10,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CatsService } from '../services/cats.service';
-import { Cats } from '../entities/cats.entity';
 import { JwtAuthGuard } from '../middlewares/jwtAuthGuard.middleware';
 import { CreateCatDto } from './dto/createCats.dto';
 import { ApiTags } from '@nestjs/swagger';
