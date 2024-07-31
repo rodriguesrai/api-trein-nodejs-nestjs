@@ -67,5 +67,4 @@ jobs:
               -e DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}" \
               -e DATABASE_NAME=${{ secrets.DATABASE_NAME}} \
               --name ${{ env.CONTAINER_NAME }} \
-              
               ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
