@@ -19,7 +19,7 @@ export class SesService {
 
   async sendEmailCreatedUser(to: string): Promise<void> {
     const params = {
-      Source: 'rairodrigues@areopagus.tech',
+      Source: 'rairaienator@gmail.com',
       Destination: {
         ToAddresses: [to],
       },
