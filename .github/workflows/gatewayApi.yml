@@ -119,7 +119,9 @@ jobs:
               -e AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}" \
               -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
               -e AWS_REGION="${{ secrets.AWS_REGION }}" \
+              -e RABBITMQ_URL="${{ secrets.RABBITMQ_URL }}" \
               -e MONGODB_URI="${{ secrets.MONGODB_URI }}" \
+              -e EMAIL_SOURCE="${{ secrets.EMAIL_SOURCE }}" \
               -e S3_BUCKET_NAME="${{ secrets.S3_BUCKET_NAME }}" \
               -e CATS_SERVICE_HOST="${{ secrets.CATS_SERVICE_HOST }}" \
               -e CATS_SERVICE_PORT="${{ secrets.CATS_SERVICE_PORT }}" \

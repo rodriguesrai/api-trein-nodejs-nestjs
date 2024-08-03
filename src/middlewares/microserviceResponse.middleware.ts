@@ -26,7 +26,7 @@ export class MicroserviceResponseInterceptor<T>
         }
 
         throw new HttpException(
-          'Unexpected response from microservice',
+          'Unexpected response from cats-service',
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }),

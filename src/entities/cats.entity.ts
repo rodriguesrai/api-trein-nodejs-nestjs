@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Users } from './users.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Cats {
@@ -14,6 +15,10 @@ export class Cats {
 
   @ManyToOne(() => Users, (users) => users.userId)
   @JoinColumn({ name: 'userId' })
+  @Exclude()
+  user: Users;
+
+  @Column()
   userId: number;
 
   @Column()

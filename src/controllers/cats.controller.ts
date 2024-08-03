@@ -29,12 +29,9 @@ import { MicroserviceResponseInterceptor } from '../middlewares/microserviceResp
 export class CatsController {
   constructor(
     @Inject('CATS_SERVICE') private readonly catsServiceClient: ClientProxy,
-  ) {
-    console.log('catsControllerConstructor', catsServiceClient);
-  }
+  ) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   @SwaggerGetAllCats()
   async findAll() {
     return await this.catsServiceClient.send({ cmd: 'get_cats' }, {});
@@ -86,7 +83,6 @@ export class CatsController {
   @UseGuards(JwtAuthGuard)
   @SwaggerDeleteCat()
   async delete(@Param('id') id: number) {
-    console.log(`Received request to delete cat with id: ${id}`);
     return await this.catsServiceClient.send({ cmd: 'delete_cat' }, id);
   }
 }
