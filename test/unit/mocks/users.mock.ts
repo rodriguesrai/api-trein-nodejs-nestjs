@@ -13,7 +13,7 @@ export const invalidUsersBody = {
 };
 
 export const returnedUserRepositoryMock = {
-  id: 1,
+  userId: 1,
   name: 'John Doe',
   email: 'exemple@example.com',
   username: 'johndoe',
@@ -21,7 +21,7 @@ export const returnedUserRepositoryMock = {
 };
 
 export const returnedUserService = {
-  id: 1,
+  userId: 1,
   email: 'exemple@example.com',
   username: 'johndoe',
 };

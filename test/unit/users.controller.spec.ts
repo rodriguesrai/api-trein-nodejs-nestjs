@@ -36,7 +36,7 @@ describe('UsersController tests', () => {
 
   it('should create a user', async () => {
     const createUserDto: CreateUserDto = validUsersBody;
-    const createdUser: Users = { id: 1, ...createUserDto };
+    const createdUser: Users = { userId: 1, ...createUserDto };
 
     jest.spyOn(usersService, 'create').mockResolvedValue(createdUser);
 
