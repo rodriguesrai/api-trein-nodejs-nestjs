@@ -1,0 +1,71 @@
+name: Deploy Cats Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - cats/**
+      - .github/workflows/deployCatsService.yml
+
+env:
+  IMAGE_NAME: cats-service
+  REGISTRY: ghcr.io
+  CONTAINER_NAME: api-trein-cats-service
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        working-directory: cats
+        run: docker build -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }} .
+      
+      - name: List Docker images
+        run: docker images
+
+      - name: Publish image to GitHub Registry
+        run: docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            sudo docker network inspect mynetwork >/dev/null 2>&1 || sudo docker network create mynetwork
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
+            docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            docker pull ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+            docker run -d \
+              --restart=unless-stopped \
+              -p ${{ secrets.CATS_SERVICE_PORT}}:${{ secrets.CATS_SERVICE_PORT}} \
+              -e CATS_SERVICE_PORT=${{ secrets.CATS_SERVICE_PORT}} \
+              -e DATABASE_HOST=${{ secrets.DATABASE_HOST}} \
+              -e DATABASE_PORT=${{ secrets.DATABASE_PORT}} \
+              -e DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME}} \
+              -e DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}" \
+              -e DATABASE_NAME=${{ secrets.DATABASE_NAME}} \
+              --name ${{ env.CONTAINER_NAME }} \
+              --network mynetwork \
+              ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest

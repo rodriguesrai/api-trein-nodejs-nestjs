@@ -1,14 +1,24 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CatsController } from '../controllers/cats.controller';
-import { Cats } from '../entities/cats.entity';
-import { CatsService } from '../services/cats.service';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersModule } from './users.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule } from '@nestjs/config';
 
+ConfigModule.forRoot();
 @Module({
-  imports: [TypeOrmModule.forFeature([Cats]), JwtModule, UsersModule],
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'CATS_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: process.env.CATS_SERVICE_HOST,
+          port: parseInt(process.env.CATS_SERVICE_PORT),
+        },
+      },
+    ]),
+    JwtModule,
+  ],
   controllers: [CatsController],
-  providers: [CatsService],
 })
 export class CatsModule {}

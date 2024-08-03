@@ -17,10 +17,5 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  },
-  "exclude": [
-    "cats",
-    "node_modules",
-    "dist"
-  ]
+  }
 }
