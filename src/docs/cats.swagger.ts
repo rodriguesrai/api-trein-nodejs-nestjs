@@ -18,7 +18,7 @@ export function SwaggerGetCatById() {
 
 export function SwaggerCreateCat() {
   return applyDecorators(
-    ApiBearerAuth(),
+    ApiBearerAuth('access-token'),
     ApiOperation({ summary: 'Create a new cat' }),
     ApiResponse({ status: 201, description: 'Cat created successfully' }),
     ApiResponse({ status: 400, description: 'Bad request' }),
@@ -28,7 +28,7 @@ export function SwaggerCreateCat() {
 
 export function SwaggerCreateRelationCatUser() {
   return applyDecorators(
-    ApiBearerAuth(),
+    ApiBearerAuth('access-token'),
     ApiOperation({ summary: 'Add an owner(User) to a Cat' }),
     ApiResponse({ status: 201, description: 'Relation created successfully' }),
     ApiResponse({ status: 400, description: 'Bad request' }),
@@ -38,7 +38,7 @@ export function SwaggerCreateRelationCatUser() {
 
 export function SwaggerUpdateCat() {
   return applyDecorators(
-    ApiBearerAuth(),
+    ApiBearerAuth('access-token'),
     ApiOperation({ summary: 'Update a cat' }),
     ApiResponse({ status: 200, description: 'Cat updated successfully' }),
     ApiResponse({ status: 404, description: 'Cat not found' }),
@@ -48,7 +48,7 @@ export function SwaggerUpdateCat() {
 
 export function SwaggerDeleteCat() {
   return applyDecorators(
-    ApiBearerAuth(),
+    ApiBearerAuth('access-token'),
     ApiOperation({ summary: 'Delete a cat' }),
     ApiResponse({ status: 200, description: 'Cat deleted successfully' }),
     ApiResponse({ status: 404, description: 'Cat not found' }),
