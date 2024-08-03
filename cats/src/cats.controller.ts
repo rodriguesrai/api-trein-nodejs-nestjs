@@ -3,7 +3,7 @@ import { CatsService } from './services/cats.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { Cats } from './entities/cats.entity';
 import { ServiceResponse } from './interfaces/serviceResponse';
-import { CatDTO } from './entities/cat.dto';
+import { CatDTO } from './dto/cat.dto';
 
 @Controller()
 export class CatsController {

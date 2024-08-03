@@ -1,10 +1,10 @@
-import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cats } from '../entities/cats.entity';
 import { Users } from '../entities/users.entity';
 import { ServiceResponse } from 'src/interfaces/serviceResponse';
-import { CatDTO } from 'src/entities/cat.dto';
+import { CatDTO } from '../dto/cat.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -92,7 +92,7 @@ export class CatsService {
     return { status: HttpStatus.OK, data: updatedCat };
   }
 
-  async delete(catId: number): Promise<ServiceResponse<null>> {
+  async delete(catId: number): Promise<ServiceResponse<string>> {
     const cat = await this.catsRepository.findOne({
       where: { catId },
       relations: ['user'],

@@ -39,7 +39,7 @@ export class UsersService {
     try {
       const savedUser = await this.usersRepository.save(newUser);
       const userDto = plainToInstance(UsersDto, savedUser);
-      await this.producerService.addToEmailQueue(savedUser.email);
+      this.producerService.addToEmailQueue(savedUser.email);
       return { ...userDto, userId: savedUser.userId };
     } catch (error) {
       if (
