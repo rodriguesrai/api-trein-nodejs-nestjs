@@ -53,6 +53,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            sudo docker network inspect mynetwork >/dev/null 2>&1 || sudo docker network create mynetwork
             docker stop ${{ env.CONTAINER_NAME }} || true
             docker rm ${{ env.CONTAINER_NAME }} || true
             docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
@@ -67,4 +68,5 @@ jobs:
               -e DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}" \
               -e DATABASE_NAME=${{ secrets.DATABASE_NAME}} \
               --name ${{ env.CONTAINER_NAME }} \
+              --network mynetwork \
               ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
