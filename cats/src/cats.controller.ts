@@ -3,18 +3,19 @@ import { CatsService } from './services/cats.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { Cats } from './entities/cats.entity';
 import { ServiceResponse } from './interfaces/serviceResponse';
+import { CatDTO } from './entities/cat.dto';
 
 @Controller()
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @MessagePattern({ cmd: 'get_cats' })
-  async findAll(): Promise<ServiceResponse<Cats[]>> {
+  async findAll(): Promise<ServiceResponse<CatDTO[]>> {
     return await this.catsService.findAll();
   }
 
   @MessagePattern({ cmd: 'get_one_cat' })
-  async findOne(id: number): Promise<ServiceResponse<Cats>> {
+  async findOne(id: number): Promise<ServiceResponse<CatDTO>> {
     return await this.catsService.findOne(id);
   }
 

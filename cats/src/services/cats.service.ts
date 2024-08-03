@@ -1,9 +1,11 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cats } from '../entities/cats.entity';
 import { Users } from '../entities/users.entity';
 import { ServiceResponse } from 'src/interfaces/serviceResponse';
+import { CatDTO } from 'src/entities/cat.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class CatsService {
@@ -14,18 +16,21 @@ export class CatsService {
     private usersRepository: Repository<Users>,
   ) {}
 
-  async findAll(): Promise<ServiceResponse<Cats[]>> {
-    const response = await this.catsRepository.find({ relations: ['userId'] });
+  async findAll(): Promise<ServiceResponse<CatDTO[]>> {
+    const response = await this.catsRepository.find({
+      relations: ['user'],
+    });
+    const catDTO = plainToInstance(CatDTO, response);
     return {
       status: HttpStatus.OK,
-      data: response,
+      data: catDTO,
     };
   }
 
-  async findOne(catId: number): Promise<ServiceResponse<Cats>> {
+  async findOne(catId: number): Promise<ServiceResponse<CatDTO>> {
     const response = await this.catsRepository.findOne({
       where: { catId },
-      relations: ['userId'],
+      relations: ['user'],
     });
 
     if (!response) {
@@ -34,7 +39,8 @@ export class CatsService {
         data: { message: 'Cat not found' },
       };
     }
-    return { status: HttpStatus.OK, data: response };
+    const catDTO = plainToInstance(CatDTO, response);
+    return { status: HttpStatus.OK, data: catDTO };
   }
 
   async create(cat: Partial<Cats>): Promise<ServiceResponse<Cats>> {
@@ -61,7 +67,7 @@ export class CatsService {
       };
     }
 
-    cat.userId = user.userId;
+    // cat.userId = user.userId;
     const updatedCat = await this.catsRepository.save(cat);
 
     return { status: HttpStatus.OK, data: updatedCat };
@@ -89,7 +95,7 @@ export class CatsService {
   async delete(catId: number): Promise<ServiceResponse<null>> {
     const cat = await this.catsRepository.findOne({
       where: { catId },
-      relations: ['userId'],
+      relations: ['user'],
     });
 
     if (!cat) {
