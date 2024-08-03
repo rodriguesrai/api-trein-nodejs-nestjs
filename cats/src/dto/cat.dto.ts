@@ -1,5 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Users } from './users.entity';
+import { Users } from '../entities/users.entity';
 
 // cat.dto.ts
 export class CatDTO {
