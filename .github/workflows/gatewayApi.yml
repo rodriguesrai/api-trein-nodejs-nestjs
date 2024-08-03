@@ -1,4 +1,4 @@
-name: Node.js CI/CD Pipeline
+name: Deploy Gateway API
 
 on:
   push:
