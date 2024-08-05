@@ -1,12 +1,12 @@
 <h1 align="center" style="font-weight: bold;">MicroArchAPI</h1>
 
-<p align="center">
+<p align="">
     <b>MicroArchAPI é uma API RESTful que demonstra o uso de microserviços e ferramentas modernas! 🛠️📡</b>
 </p>
-<p align="center">
+<p align="">
 Neste projeto, fui responsável por desenvolver um back-end utilizando NestJS e TypeScript. A API RESTful foi projetada para ser escalável e modular, facilitando a integração com diferentes serviços front-end. Além do desenvolvimento da API, o projeto focou na criação de uma infraestrutura utilizando diversos serviços da AWS: EC2, SES, S3, CloudFront e RDS. Também apliquei conceitos de microservices utilizando NestJS para desenvolver um dos serviços da API.
 </p>
-
+<p>Front-end do projeto: https://github.com/rodriguesrai/front-trein-vuejs-vuetify-ts</p>
 <details open>
   <summary><h3>💻 Principais tecnologias</h3></summary><br>
 
