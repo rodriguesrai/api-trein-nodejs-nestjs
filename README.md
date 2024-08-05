@@ -7,6 +7,25 @@
 Neste projeto, fui responsável por desenvolver um back-end utilizando NestJS e TypeScript. A API RESTful foi projetada para ser escalável e modular, facilitando a integração com diferentes serviços front-end. Além do desenvolvimento da API, o projeto focou na criação de uma infraestrutura utilizando diversos serviços da AWS: EC2, SES, S3, CloudFront e RDS. Também apliquei conceitos de microservices utilizando NestJS para desenvolver um dos serviços da API.
 </p>
 
+<details open>
+  <summary><h3>💻 Principais tecnologias</h3></summary><br>
+
+- NestJS
+- TypeORM
+- AWS RDS
+- RabbitMQ
+- Swagger
+- AWS SDK
+- Docker
+- Docker-Compose
+
+ <b> Para desenvolver os testes: </b>
+ 
+- Jest
+- Supertest
+</details>
+
+
 <details>
 <summary><h3>🏗️ Arquitetura</h3></summary><br>
 <img src="https://github.com/user-attachments/assets/3426b6c5-40c4-4268-aa42-6256f81033d3" alt="Architecture diagram">
@@ -25,25 +44,6 @@ Neste projeto, fui responsável por desenvolver um back-end utilizando NestJS e 
 - `users`: Representa os usuários do sistema.
 - `cats`: Representa os gatos, com um relacionamento `n:1` ("muitos para um") com a tabela `users`.
 </details>
-
-<details>
-  <summary><h3>💻 Principais tecnologias</h3></summary><br>
-
-- NestJS
-- TypeORM
-- AWS RDS
-- RabbitMQ
-- Swagger
-- AWS SDK
-- Docker
-- Docker-Compose
-
- <b> Para desenvolver os testes: </b>
- 
-- Jest
-- Supertest
-</details>
-
 
 <details>
   <summary><h3>📍 API Endpoints</h3></summary><br>
@@ -68,21 +68,7 @@ Aqui estão os principais endpoints da API, descrevendo o que cada um faz e os d
 
 <details>
   <summary><h3>🚀 Getting started</h3></summary><br>
-<h3>Cloning</h3>
-
-Após usar o comando acessar a pasta do projeto para fazer os próximos passos.
-
-```bash
-git clone your-project-url-in-github
-```
-
-- Utilizando o comando para executar os containers docker através do docker compose
-
-```bash
-docker-compose -up
-```
-  
-- Para verificar se o back-end está on, acesse http://localhost:8080/actuator/health.
+:construction: em construção ! :construction:
 </details>
 
 
