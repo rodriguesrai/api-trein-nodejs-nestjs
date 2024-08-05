@@ -8,22 +8,26 @@ Neste projeto, fui responsável por desenvolver um back-end utilizando NestJS e 
 </p>
 
 <details>
-<summary><h2 id="architecture">🏗️ Arquitetura</h2></summary><br>
+<summary><h3>🏗️ Arquitetura</h3></summary><br>
 <img src="https://github.com/user-attachments/assets/3426b6c5-40c4-4268-aa42-6256f81033d3" alt="Architecture diagram">
+    
+<img src="https://github.com/user-attachments/assets/710171f7-66ab-4d4e-a36d-47e0e3919372" alt="EC2 Instance Logs">
+
+<img src="https://github.com/user-attachments/assets/0ec70c47-ef85-4fcf-a6b7-cfcf2261562b" alt="RabbitMQ">
 </details>
 
 <details>
-  <summary><h2>🗄️ Descrição do banco de dados</h2></summary><br>
+  <summary><h3>🗄️ Descrição do banco de dados</h3></summary><br>
 
   <img src="https://github.com/user-attachments/assets/b30dbe67-ec50-430d-94c2-c52fa3af323c" alt="Modelo database" width="600"/>
 
   Nesse modelo, temos as seguintes tabelas:
 - `users`: Representa os usuários do sistema.
-- `cats`: Representa os gatos, com um relacionamento `n:1` ("muitos para um") com a tabela `users`
+- `cats`: Representa os gatos, com um relacionamento `n:1` ("muitos para um") com a tabela `users`.
 </details>
 
 <details>
-  <summary><h2>💻 Principais tecnologias</h2></summary><br>
+  <summary><h3>💻 Principais tecnologias</h3></summary><br>
 
 - NestJS
 - TypeORM
@@ -42,7 +46,7 @@ Neste projeto, fui responsável por desenvolver um back-end utilizando NestJS e 
 
 
 <details>
-  <summary><h2>📍 API Endpoints</h2></summary><br>
+  <summary><h3>📍 API Endpoints</h3></summary><br>
 Aqui estão os principais endpoints da API, descrevendo o que cada um faz e os detalhes relevantes.
 
 | Rotas                     | Descrição                                           |
@@ -55,6 +59,7 @@ Aqui estão os principais endpoints da API, descrevendo o que cada um faz e os d
 | `POST /cats/{catId}/users/{userId}` | Associa um usuário a um gato específico. |
 | `POST /users`         | Cria uma novo usuário no sistema.             |
 | `POST /auth/login`         | Realiza o login de um usuário e retorna um token JWT.|
+| `POST /files/upload`         | Rota para upload de arquivos que armazena no AWS S3|
 
 
 </details>
@@ -62,7 +67,7 @@ Aqui estão os principais endpoints da API, descrevendo o que cada um faz e os d
 
 
 <details>
-  <summary><h2>🗄️ 🚀 Getting started</h2></summary><br>
+  <summary><h3>🚀 Getting started</h3></summary><br>
 <h3>Cloning</h3>
 
 Após usar o comando acessar a pasta do projeto para fazer os próximos passos.
