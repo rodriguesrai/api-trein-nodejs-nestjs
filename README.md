@@ -13,9 +13,11 @@ Neste projeto, fui responsável por desenvolver um back-end utilizando NestJS e 
 - NestJS
 - TypeORM
 - AWS RDS
+- AWS EC2
+- AWS SES
+- AWS SDK
 - RabbitMQ
 - Swagger
-- AWS SDK
 - Docker
 - Docker-Compose
 
